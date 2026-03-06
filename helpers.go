@@ -14,10 +14,15 @@ import (
 // NewMessage creates a new Message.
 //
 // chatID is where to send it, text is the message text.
-func NewMessage(chatID int64, text string) MessageConfig {
+func NewMessage(chatID int64, text string, topicID ...int) MessageConfig {
+	threadID := 0
+	if len(topicID) > 0 {
+		threadID = topicID[0]
+	}
 	return MessageConfig{
 		BaseChat: BaseChat{
 			ChatID:           chatID,
+			MessageThreadID:  threadID,
 			ReplyToMessageID: 0,
 		},
 		Text:                  text,
@@ -77,10 +82,14 @@ func NewCopyMessage(chatID int64, fromChatID int64, messageID int) CopyMessageCo
 // FileReader, or FileBytes.
 //
 // Note that you must send animated GIFs as a document.
-func NewPhoto(chatID int64, file RequestFileData) PhotoConfig {
+func NewPhoto(chatID int64, file RequestFileData, topicID ...int) PhotoConfig {
+	threadID := 0
+	if len(topicID) > 0 {
+		threadID = topicID[0]
+	}
 	return PhotoConfig{
 		BaseFile: BaseFile{
-			BaseChat: BaseChat{ChatID: chatID},
+			BaseChat: BaseChat{ChatID: chatID, MessageThreadID: threadID},
 			File:     file,
 		},
 	}
@@ -111,10 +120,14 @@ func NewAudio(chatID int64, file RequestFileData) AudioConfig {
 }
 
 // NewDocument creates a new sendDocument request.
-func NewDocument(chatID int64, file RequestFileData) DocumentConfig {
+func NewDocument(chatID int64, file RequestFileData, topicID ...int) DocumentConfig {
+	threadID := 0
+	if len(topicID) > 0 {
+		threadID = topicID[0]
+	}
 	return DocumentConfig{
 		BaseFile: BaseFile{
-			BaseChat: BaseChat{ChatID: chatID},
+			BaseChat: BaseChat{ChatID: chatID, MessageThreadID: threadID},
 			File:     file,
 		},
 	}

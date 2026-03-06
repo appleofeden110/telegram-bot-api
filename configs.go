@@ -268,6 +268,7 @@ type BaseChat struct {
 	ChannelUsername          string
 	ProtectContent           bool
 	ReplyToMessageID         int
+	MessageThreadID          int
 	ReplyMarkup              interface{}
 	DisableNotification      bool
 	AllowSendingWithoutReply bool
@@ -277,6 +278,7 @@ func (chat *BaseChat) params() (Params, error) {
 	params := make(Params)
 
 	params.AddFirstValid("chat_id", chat.ChatID, chat.ChannelUsername)
+	params.AddNonZero("message_thread_id", chat.MessageThreadID)
 	params.AddNonZero("reply_to_message_id", chat.ReplyToMessageID)
 	params.AddBool("disable_notification", chat.DisableNotification)
 	params.AddBool("allow_sending_without_reply", chat.AllowSendingWithoutReply)
@@ -337,6 +339,7 @@ func (config MessageConfig) params() (Params, error) {
 	}
 
 	params.AddNonEmpty("text", config.Text)
+	params.AddNonZero("message_thread_id", config.BaseChat.MessageThreadID)
 	params.AddBool("disable_web_page_preview", config.DisableWebPagePreview)
 	params.AddNonEmpty("parse_mode", config.ParseMode)
 	err = params.AddInterface("entities", config.Entities)
@@ -2226,6 +2229,7 @@ func (config DeleteChatStickerSetConfig) params() (Params, error) {
 type MediaGroupConfig struct {
 	ChatID          int64
 	ChannelUsername string
+	MessageThreadID int
 
 	Media               []interface{}
 	DisableNotification bool
@@ -2240,6 +2244,7 @@ func (config MediaGroupConfig) params() (Params, error) {
 	params := make(Params)
 
 	params.AddFirstValid("chat_id", config.ChatID, config.ChannelUsername)
+	params.AddNonZero("message_thread_id", config.MessageThreadID)
 	params.AddBool("disable_notification", config.DisableNotification)
 	params.AddNonZero("reply_to_message_id", config.ReplyToMessageID)
 
