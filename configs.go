@@ -1167,6 +1167,7 @@ type WebhookConfig struct {
 	MaxConnections     int
 	AllowedUpdates     []string
 	DropPendingUpdates bool
+	SecretToken        string
 }
 
 func (config WebhookConfig) method() string {
@@ -1181,6 +1182,7 @@ func (config WebhookConfig) params() (Params, error) {
 	}
 
 	params.AddNonEmpty("ip_address", config.IPAddress)
+	params.AddNonEmpty("secret_token", config.SecretToken)
 	params.AddNonZero("max_connections", config.MaxConnections)
 	err := params.AddInterface("allowed_updates", config.AllowedUpdates)
 	params.AddBool("drop_pending_updates", config.DropPendingUpdates)
